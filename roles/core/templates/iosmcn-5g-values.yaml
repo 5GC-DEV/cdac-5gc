@@ -63,7 +63,7 @@ omec-control-plane:
       syncUrl: http://sdcore-adapter-v2-1.aether-roc.svc:8080/synchronize
 
     sctplb:
-      deploy: true # If enabled then deploy sctp pod
+      deploy: false # If enabled then deploy sctp pod
       ngapp:
         externalIp: {{ core.amf.ip }}
         port: 38412
@@ -82,6 +82,8 @@ omec-control-plane:
         amfcfg.conf:
           configuration:
             enableDBStore: true # Store AMF subscribers in the datastore
+            networkFeatureSupport5GS:
+              imsVoPS: 1
 
     # SMF config override. Refer to Helm Charts values for more options
     smf:
