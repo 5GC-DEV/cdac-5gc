@@ -1,7 +1,6 @@
-# SPDX-FileCopyrightText: 2022-present Intel Corporation
-# Copyright 2019-present Open Networking Foundation
-#
+# Copyright (c) 2024 https://www.cdac.in All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
+
 
 # Disable 4G Control Plane
 omec-control-plane:
@@ -16,9 +15,18 @@ omec-control-plane:
 5g-control-plane:
   enable5G: true
   images:
-    repository: ""    # defaults to Docker Hub
-    #tags:
-    #  amf: <amf image tag>
+    repository: "docker.io/"    # defaults to Docker Hub
+    tags:
+      amf: cdac5gc/5gc-amf:release-0.0.8
+      smf: cdac5gc/5gc-smf:release-0.0.4
+      pcf: cdac5gc/5gc-pcf:release-0.0.3
+      nrf: cdac5gc/5gc-nrf:release-0.0.4
+      ausf: cdac5gc/5gc-ausf:release-0.0.3
+      nssf: cdac5gc/5gc-nssf:release-0.0.3
+      udm: cdac5gc/5gc-udm:release-0.0.3
+      udr: cdac5gc/5gc-udr:release-0.0.3
+      webui: cdac5gc/5gc-webui:release-0.0.3
+      metricfunc: cdac5gc/5gc-metricfunc:release-0.0.3
     # refer to above Helm Chart to add other NF images
 
   kafka:
@@ -102,8 +110,8 @@ omec-sub-provision:
   enable: true
   images:
     repository: ""    # defaults to Docker Hub
-    #tags:
-    #  simapp: #add simapp override image
+    tags:
+      simapp: cdac5gc/5gc-simapp:release-0.0.3
 
   config:
     simapp:
@@ -112,7 +120,7 @@ omec-sub-provision:
           configuration:
             provision-network-slice: {{ core.standalone | string }} # if enabled, Device Groups & Slices configure by simapp
             sub-provision-endpt:
-              addr: webui.omec.svc.cluster.local  # subscriber configuation endpoint.
+              addr: webui  # subscriber configuation endpoint.
             # sub-proxy-endpt: # used if subscriber proxy is enabled in the ROC.
             #   addr: subscriber-proxy.aether-roc.svc.cluster.local
             #   port: 5000
@@ -121,26 +129,51 @@ omec-sub-provision:
             # You can have any number of subscriber ranges
             # This block is always necessary to establish range(s) of valid IMSIs
             subscribers:
-            - ueId-start: "001010123456864"
-              ueId-end: "001010123456868"
+            - ueId-start: "001010000000001"
+              ueId-end: "001010000000003"
               plmnId: "00101"
-              opc: "00000000000000000000000000000000"
+              opc: "C42449363BBAD02B66D16BC975D77CC1"
               op: ""
-              key: "ffffffffffffffffffffffffffffffff"
+              key: "fec86ba6eb707ed08905757b1bb44b8f"
+              sequenceNumber: "16f3b3f70fc2"
+            - ueId-start: "001010000000005"
+              ueId-end: "001010000000005"
+              plmnId: "00101"
+              opc: "63bfa50ee6523365ff14c1f45f88737d"
+              op: ""
+              key: "050A34601D4F07677303652C0462535B"
+              sequenceNumber: "16f3b3f70fc2"
+            - ueId-start: "001010000000008"
+              ueId-end: "001010000000008"
+              plmnId: "00101"
+              opc: "E8ED289DEBA952E4283B54E88E6183CA"
+              op: ""
+              key: "865B5CE8B199B49FAA5F0A2EE238A6B8"
+              sequenceNumber: "16f3b3f70fc2"
+            - ueId-start: "001010000000009"
+              ueId-end: "001010000000009"
+              plmnId: "00101"
+              opc: "63bfa50ee6523365ff14c1f45f88737d"
+              op: ""
+              key: "090A34601D4F07677303652C0462535B"
               sequenceNumber: "16f3b3f70fc2"
 
             # Configure Device Groups (ignored if provision-network-slice is disabled)
             device-groups:
-            - name:  "5g-user-group1"
+            - name:  "5g-gnbsim-user-group1"
               imsis:
-                - "001010123456864"
-                - "001010123456865"
+                - "001010000000001"
+                - "001010000000002"
+                - "001010000000003"
+                - "001010000000005"
+                - "001010000000008"
+                - "001010000000009"
               ip-domain-name: "pool1"
               ip-domain-expanded:
                 dnn: internet
-                dns-primary: "8.8.8.8"        # Value is sent to UE
-                mtu: 1460                     # Value is sent to UE when PDU Session Established
-                ue-ip-pool: "172.250.1.0/16"  # IP address pool for subscribers
+                dns-primary: "10.176.0.11"        # Value is sent to UE
+                mtu: 1456                     # Value is sent to UE when PDU Session Established
+                ue-ip-pool: "172.250.0.0/24"  # IP address pool for subscribers
                 ue-dnn-qos:
                   dnn-mbr-downlink: 1000      # UE level downlink QoS (Maximum bit rate per UE)
                   dnn-mbr-uplink:   1000      # UE level uplink QoS (Maximum bit rate per UE)
@@ -159,10 +192,10 @@ omec-sub-provision:
             network-slices:
             - name: "default"      # can be any unique slice name
               slice-id:            # must match with slice configured in gNB, UE
-                sd: "010203"
+                sd: "000000"
                 sst: 1
               site-device-group:
-              - "5g-user-group1"   # All UEs in this device-group are assigned to this slice
+              - "5g-gnbsim-user-group1"   # All UEs in this device-group are assigned to this slice
               # Applicaiton filters control what each user can access.
               # Default, allow access to all applications
               application-filtering-rules:
@@ -199,9 +232,9 @@ omec-user-plane:
     tags:
       tools: omecproject/busybox:stable
     # uncomment following section to add update bess image tag
-    #tags:
-    #  bess: <bess image tag>
-    #  pfcpiface: <pfcp image tag>
+    tags:
+      bess: cdac5gc/upf-epc-bess:release-ivybridge-0.0.3
+      pfcpiface: cdac5gc/upf-epc-pfcpiface:release-ivybridge-0.0.3
   config:
     upf:
       name: "oaisim"
