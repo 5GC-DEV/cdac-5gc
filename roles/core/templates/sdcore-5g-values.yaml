@@ -62,7 +62,6 @@ omec-control-plane:
 
     upfadapter:
       deploy: false # If enabled then deploy upf adapter pod
-      deploy: false # If enabled then deploy upf adapter pod
 
     metricfunc:
       deploy: true
@@ -274,8 +273,6 @@ omec-sub-provision:
                 mtu: 1460                     # Value is sent to UE when PDU Session Established
                 ue-ip-pool: "172.250.1.0/16"  # IP address pool for subscribers
                 ue-dnn-qos:
-                  dnn-mbr-downlink: 1000      # UE level downlink QoS (Maximum bit rate per UE)
-                  dnn-mbr-uplink:   1000      # UE level uplink QoS (Maximum bit rate per UE)
                   dnn-mbr-downlink: 1000      # UE level downlink QoS (Maximum bit rate per UE)
                   dnn-mbr-uplink:   1000      # UE level uplink QoS (Maximum bit rate per UE)
                   bitrate-unit: Mbps          # Unit for above QoS rates
