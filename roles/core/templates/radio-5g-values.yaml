@@ -16,7 +16,7 @@ omec-control-plane:
 5g-control-plane:
   enable5G: true
   images:
-    repository: ""    # defaults to Docker Hub
+    repository: "registry.aetherproject.org/proxy/"
     #tags:
     #  amf: <amf image tag>
     # refer to above Helm Chart to add other NF images
@@ -30,21 +30,22 @@ omec-control-plane:
       enabled: false
     architecture: replicaset
     replicaCount: 2
+
   resources:
     enabled: false
 
   config:
-    # logger:
+    logger:
+      Util:
+        debugLevel: warn
     #   # network function
     #   AMF:
     #     debugLevel: trace
-    #     ReportCaller: false
     #   SMF:
     #     debugLevel: trace
-    #     ReportCaller: false
 
     mongodb:
-      name: free5gc
+      name: aether
       url: mongodb://mongodb-arbiter-headless # Enable if cluster deployment required
       authKeysDbName: authentication
       authUrl: mongodb://mongodb-arbiter-headless
@@ -61,6 +62,7 @@ omec-control-plane:
 
     upfadapter:
       deploy: false # If enabled then deploy upf adapter pod
+      deploy: false # If enabled then deploy upf adapter pod
 
     metricfunc:
       deploy: true
@@ -70,30 +72,52 @@ omec-control-plane:
     # directly provided through Helm Charts
     amf:
       cfgFiles:
-        amfcfg.conf:
+        amfcfg.yaml:
           configuration:
             enableDBStore: true # Store AMF subscribers in the datastore
+            networkFeatureSupport5GS: # 5gs Network Feature Support IE, refer to TS 24.501 sec. 9.11.3.5
+              imsVoPS: 1 # IMS voice over PS session indicator (uinteger, range: 0~1)
+            # security:
+            #   integrityOrder:
+            #     - NIA3
+            #     - NIA2
+            #     - NIA0
+            #   cipheringOrder:
+            #     - NEA3
+            #     - NEA2
+            #     - NEA0
 
     # SMF config override. Refer to Helm Charts values for more options
     smf:
       cfgFiles:
-        smfcfg.conf:
+        smfcfg.yaml:
           configuration:
             enableDBStore: true  # Store SMF subscribers in the datastore
+            # staticIpInfo:
+            #   - dnn: internet
+            #     imsiIpInfo:
+            #       imsi-001010123456864: "172.250.0.100"
+            #       imsi-001010123456865: "172.250.0.101"
 
     #pcf:
     #  cfgFiles:
-    #    pcfcfg.conf:
+    #    pcfcfg.yaml:
     #      configuration:
 
     nrf:
       cfgFiles:
-        nrfcfg.conf:
+        nrfcfg.yaml:
           configuration:
             mongoDBStreamEnable: false    # enable/disable MongoDB stream in NRF
             nfProfileExpiryEnable: true   # If enabled, remove NF profile if no keepalive received
             nfKeepAliveTime: 60           # default timeout for NF profiles
 
+    webui:
+      cfgFiles:
+        webuicfg.yaml:
+          configuration:
+            managedByConfigPod:
+              enabled: {{ not core.standalone }}
 
 # Override values for omec-sub-provision (subscriber) Helm Chart
 # https://github.com/omec-project/sdcore-helm-charts/blob/main/omec-sub-provision/values.yaml
@@ -101,7 +125,7 @@ omec-control-plane:
 omec-sub-provision:
   enable: true
   images:
-    repository: ""    # defaults to Docker Hub
+    repository: "registry.aetherproject.org/proxy/"
     #tags:
     #  simapp: #add simapp override image
 
@@ -112,7 +136,7 @@ omec-sub-provision:
           configuration:
             provision-network-slice: {{ core.standalone | string }} # if enabled, Device Groups & Slices configure by simapp
             sub-provision-endpt:
-              addr: webui.omec.svc.cluster.local  # subscriber configuation endpoint.
+              addr: webui  # subscriber configuation endpoint.
             # sub-proxy-endpt: # used if subscriber proxy is enabled in the ROC.
             #   addr: subscriber-proxy.aether-roc.svc.cluster.local
             #   port: 5000
@@ -142,6 +166,8 @@ omec-sub-provision:
                 mtu: 1460                     # Value is sent to UE when PDU Session Established
                 ue-ip-pool: "172.250.1.0/16"  # IP address pool for subscribers
                 ue-dnn-qos:
+                  dnn-mbr-downlink: 1000      # UE level downlink QoS (Maximum bit rate per UE)
+                  dnn-mbr-uplink:   1000      # UE level uplink QoS (Maximum bit rate per UE)
                   dnn-mbr-downlink: 1000      # UE level downlink QoS (Maximum bit rate per UE)
                   dnn-mbr-uplink:   1000      # UE level uplink QoS (Maximum bit rate per UE)
                   bitrate-unit: Mbps          # Unit for above QoS rates
@@ -194,7 +220,7 @@ omec-user-plane:
   resources:
     enabled: false
   images:
-    repository: ""    # defaults to Docker Hub
+    repository: "registry.aetherproject.org/proxy/"
     # following two lines pull busybox from Docker Hub instead of Aether Registry
     tags:
       tools: omecproject/busybox:stable
@@ -217,18 +243,20 @@ omec-user-plane:
       access:
         ipam: static
         cniPlugin: macvlan  # Can be any other plugin. Dictates how IP address are assigned
+        ipam: static
+        cniPlugin: macvlan  # Can be any other plugin. Dictates how IP address are assigned
         iface: {{ core.data_iface }}
-        gateway: 192.168.252.1
-        ip: {{ core.upf.default_upf.ip.access }}
+        gateway: {{ access_gw }}
+        ip: {{ access_ip }}
       core:
         ipam: static
         cniPlugin: macvlan  # Can be any other plugin. Dictates how IP address are assigned
         iface: {{ core.data_iface }}
-        gateway: 192.168.250.1
-        ip: {{ core.upf.default_upf.ip.core }} 
+        gateway: {{ core_gw }}
+        ip: {{ core_ip }}
       cfgFiles:
         upf.jsonc:
-          mode: af_packet                # This mode implies no DPDK
+          mode: {{ core.upf.mode }}
           hwcksum: true
           log_level: "info"
           measure_upf: true

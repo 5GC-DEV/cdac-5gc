@@ -5,6 +5,7 @@
     name: aether
     repo_url: "https://charts.aetherproject.org"
   when: inventory_hostname in groups['master_nodes'] and not core.helm.local_charts
+  when: inventory_hostname in groups['master_nodes'] and not core.helm.local_charts
 
 - name: find {{ core.data_iface }}'s subnet for RAN
   shell: ip route | grep {{ core.data_iface }} | awk '/kernel/ {print $1}' | head -1
@@ -15,10 +16,14 @@
 # TODO: check if interface subnet is valid
 - set_fact:
     ran_subnet: "{{ result.stdout if (core.ran_subnet == '') else core.ran_subnet }}"
+    access_gw: "{{ core.upf.access_subnet[:-3] }}"
+    access_ip: "{{ core.upf.default_upf.ip.access + '/24' }}"
+    core_gw: "{{ core.upf.core_subnet[:-3] }}"
+    core_ip: "{{ core.upf.default_upf.ip.core + '/24' }}"
   when: inventory_hostname in groups['master_nodes']
 
 - debug:
-    var: "ran_subnet"
+    var: ran_subnet
   when: inventory_hostname in groups['master_nodes']
 
 - name: remove /tmp/sdcore-5g-values.yaml
