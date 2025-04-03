@@ -19,14 +19,14 @@ omec-control-plane:
     tags:
       amf: cdac5gc/5gc-amf:release-0.1.2
       smf: cdac5gc/5gc-smf:release-0.1.2
-      pcf: cdac5gc/5gc-pcf:release-0.0.3
-      nrf: cdac5gc/5gc-nrf:release-0.0.4
-      ausf: cdac5gc/5gc-ausf:release-0.0.3
-      nssf: cdac5gc/5gc-nssf:release-0.0.3
-      udm: cdac5gc/5gc-udm:release-0.0.3
-      udr: cdac5gc/5gc-udr:release-0.0.3
-      webui: cdac5gc/5gc-webui:release-0.0.3
-      metricfunc: cdac5gc/5gc-metricfunc:release-0.0.3
+      pcf: cdac5gc/5gc-pcf:release-0.1.1
+      nrf: cdac5gc/5gc-nrf:release-0.1.1
+      ausf: cdac5gc/5gc-ausf:release-0.1.1
+      nssf: cdac5gc/5gc-nssf:release-0.1.1
+      udm: cdac5gc/5gc-udm:release-0.1.1
+      udr: cdac5gc/5gc-udr:release-0.1.1
+      webui: cdac5gc/5gc-webui:release-0.1.1
+      metricfunc: cdac5gc/5gc-metricfunc:release-0.1.1
     # refer to above Helm Chart to add other NF images
 
   kafka:
@@ -137,7 +137,7 @@ omec-sub-provision:
   images:
     repository: ""    # defaults to Docker Hub
     tags:
-      simapp: cdac5gc/5gc-simapp:release-0.0.3
+      simapp: cdac5gc/5gc-simapp:release-0.1.1
 
   config:
     simapp:
@@ -259,7 +259,7 @@ omec-user-plane:
       tools: omecproject/busybox:stable
     # uncomment following section to add update bess image tag
     tags:
-      bess: ghcr.io/ios-mcn-core/upf-epc-bess:release-ivybridge-0.0.3
+      bess: ghcr.io/ios-mcn-core/upf-epc-bess:release-ivybridge-0.1.2
       pfcpiface: ghcr.io/ios-mcn-core/upf-epc-pfcpiface:release-ivybridge-0.1.2
   config:
     upf:
