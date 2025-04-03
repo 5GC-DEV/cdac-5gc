@@ -17,8 +17,8 @@ omec-control-plane:
   images:
     repository: "docker.io/"    # defaults to Docker Hub
     tags:
-      amf: cdac5gc/5gc-amf:release-0.0.8
-      smf: cdac5gc/5gc-smf:release-0.0.4
+      amf: cdac5gc/5gc-amf:release-0.1.2
+      smf: cdac5gc/5gc-smf:release-0.1.2
       pcf: cdac5gc/5gc-pcf:release-0.0.3
       nrf: cdac5gc/5gc-nrf:release-0.0.4
       ausf: cdac5gc/5gc-ausf:release-0.0.3
@@ -43,14 +43,14 @@ omec-control-plane:
     enabled: false
 
   config:
-    logger:
-      Util:
-        debugLevel: warn
-    #   # network function
+    # logger:
+    #   Util:
+    #     debugLevel: warn
     #   AMF:
-    #     debugLevel: trace
+    #     debugLevel: debug
     #   SMF:
-    #     debugLevel: trace
+    #     debugLevel: debug
+
 
     mongodb:
       name: free5gc
@@ -186,7 +186,7 @@ omec-sub-provision:
 
             # Configure Device Groups (ignored if provision-network-slice is disabled)
             device-groups:
-            - name:  "5g-gnbsim-user-group1"
+            - name:  "gnbsim-user-group1"
               imsis:
                 - "001010000000001"
                 - "001010000000002"
@@ -199,7 +199,7 @@ omec-sub-provision:
                 dnn: internet
                 dns-primary: "10.176.0.11"        # Value is sent to UE
                 mtu: 1456                     # Value is sent to UE when PDU Session Established
-                ue-ip-pool: "172.250.0.0/16"  # IP address pool for subscribers
+                ue-ip-pool: {{ core.upf.default_upf.ue_ip_pool }}  # IP address pool for subscribers
                 ue-dnn-qos:
                   dnn-mbr-downlink: 1000      # UE level downlink QoS (Maximum bit rate per UE)
                   dnn-mbr-uplink:   1000      # UE level uplink QoS (Maximum bit rate per UE)
@@ -221,7 +221,7 @@ omec-sub-provision:
                 sd: "000000"
                 sst: 1
               site-device-group:
-              - "5g-gnbsim-user-group1"   # All UEs in this device-group are assigned to this slice
+              - "gnbsim-user-group1"   # All UEs in this device-group are assigned to this slice
               # Applicaiton filters control what each user can access.
               # Default, allow access to all applications
               application-filtering-rules:
@@ -259,8 +259,8 @@ omec-user-plane:
       tools: omecproject/busybox:stable
     # uncomment following section to add update bess image tag
     tags:
-      bess: cdac5gc/upf-epc-bess:release-ivybridge-0.0.3
-      pfcpiface: cdac5gc/upf-epc-pfcpiface:release-ivybridge-0.0.3
+      bess: ghcr.io/ios-mcn-core/upf-epc-bess:release-ivybridge-0.0.3
+      pfcpiface: ghcr.io/ios-mcn-core/upf-epc-pfcpiface:release-ivybridge-0.1.2
   config:
     upf:
       name: "oaisim"
