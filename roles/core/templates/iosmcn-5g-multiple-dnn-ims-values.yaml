@@ -203,7 +203,7 @@ omec-sub-provision:
   images:
     repository: ""    # defaults to Docker Hub
     tags:
-      simapp: ghcr.io/ios-mcn-core/simapp:release-0.1.1
+      simapp: ghcr.io/ios-mcn-core/simapp:release-0.1.2
 
   config:
     simapp:

@@ -17,8 +17,8 @@ omec-control-plane:
   images:
     repository: "docker.io/"    # defaults to Docker Hub
     tags:
-      amf: cdac5gc/5gc-amf:master-672a6ed
-      smf: cdac5gc/5gc-smf:master-6530eb3
+      amf: cdac5gc/5gc-amf:master-518724a
+      smf: cdac5gc/5gc-smf:master-26933ce
       pcf: cdac5gc/5gc-pcf:master-624b610
       nrf: cdac5gc/5gc-nrf:master-0a866c8
       ausf: cdac5gc/5gc-ausf:master-a6acaeb
@@ -203,7 +203,7 @@ omec-sub-provision:
   images:
     repository: ""    # defaults to Docker Hub
     tags:
-      simapp: cdac5gc/simapp:master-9cd4826
+      simapp: cdac5gc/simapp:master-dfbb736
 
   config:
     simapp:
