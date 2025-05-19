@@ -15,7 +15,7 @@ omec-control-plane:
 5g-control-plane:
   enable5G: true
   images:
-    repository: "docker.io/"    # defaults to Docker Hub
+    repository: ""    # defaults to Docker Hub
     tags:
       amf: ghcr.io/ios-mcn-core/5gc-amf:release-0.1.3
       smf: ghcr.io/ios-mcn-core/5gc-smf:release-0.1.3
