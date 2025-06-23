@@ -17,13 +17,13 @@ omec-control-plane:
   images:
     repository: ""    # defaults to Docker Hub
     tags:
-      amf: ghcr.io/ios-mcn-core/5gc-amf:release-0.1.3
-      smf: ghcr.io/ios-mcn-core/5gc-smf:release-0.1.3
+      amf: ghcr.io/ios-mcn-core/5gc-amf:release-0.1.4
+      smf: ghcr.io/ios-mcn-core/5gc-smf:release-0.1.4
       pcf: ghcr.io/ios-mcn-core/5gc-pcf:release-0.1.2
       nrf: ghcr.io/ios-mcn-core/5gc-nrf:release-0.1.1
-      ausf: ghcr.io/ios-mcn-core/5gc-ausf:release-0.1.1
+      ausf: ghcr.io/ios-mcn-core/5gc-ausf:release-0.1.2
       nssf: ghcr.io/ios-mcn-core/5gc-nssf:release-0.1.1
-      udm: ghcr.io/ios-mcn-core/5gc-udm:release-0.1.1
+      udm: ghcr.io/ios-mcn-core/5gc-udm:release-0.1.2
       udr: ghcr.io/ios-mcn-core/5gc-udr:release-0.1.2
       webui: ghcr.io/ios-mcn-core/5gc-webui:release-0.1.2
       metricfunc: ghcr.io/ios-mcn-core/metricfunc:release-0.1.1
@@ -322,8 +322,8 @@ omec-user-plane:
       tools: omecproject/busybox:stable
     # uncomment following section to add update bess image tag
     tags:
-      bess: ghcr.io/ios-mcn-core/upf-epc-bess:release-ivybridge-0.1.3
-      pfcpiface: ghcr.io/ios-mcn-core/upf-epc-pfcpiface:release-ivybridge-0.1.3
+      bess: ghcr.io/ios-mcn-core/upf-epc-bess:release-ivybridge-0.1.4
+      pfcpiface: ghcr.io/ios-mcn-core/upf-epc-pfcpiface:release-ivybridge-0.1.4
   config:
     upf:
       name: "oaisim"

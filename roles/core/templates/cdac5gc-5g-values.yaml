@@ -17,13 +17,13 @@ omec-control-plane:
   images:
     repository: "docker.io/"    # defaults to Docker Hub
     tags:
-      amf: cdac5gc/5gc-amf:master-518724a
-      smf: cdac5gc/5gc-smf:master-26933ce
+      amf: cdac5gc/5gc-amf:master-560dc70
+      smf: cdac5gc/5gc-smf:master-ea2c6ce
       pcf: cdac5gc/5gc-pcf:master-624b610
       nrf: cdac5gc/5gc-nrf:master-0a866c8
-      ausf: cdac5gc/5gc-ausf:master-a6acaeb
+      ausf: cdac5gc/5gc-ausf:master-37e152e
       nssf: cdac5gc/5gc-nssf:master-7029e42
-      udm: cdac5gc/5gc-udm:master-e041c49
+      udm: cdac5gc/5gc-udm:master-c271d3d
       udr: cdac5gc/5gc-udr:master-fe8c472
       webui: cdac5gc/5gc-webui:master-5776ea4
       metricfunc: cdac5gc/metricfunc:master-ed7ae9d
@@ -244,8 +244,8 @@ omec-user-plane:
       tools: omecproject/busybox:stable
     # uncomment following section to add update bess image tag
     tags:
-      bess: cdac5gc/upf-epc-bess:master-ivybridge-58c080d
-      pfcpiface: cdac5gc/upf-epc-pfcpiface:master-ivybridge-58c080d
+      bess: cdac5gc/upf-epc-bess:master-ivybridge-89089b9
+      pfcpiface: cdac5gc/upf-epc-pfcpiface:master-ivybridge-89089b9
   config:
     upf:
       name: "oaisim"
