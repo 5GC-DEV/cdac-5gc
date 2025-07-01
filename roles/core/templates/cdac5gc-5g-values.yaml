@@ -1,7 +1,6 @@
-# SPDX-FileCopyrightText: 2022-present Intel Corporation
-# Copyright 2019-present Open Networking Foundation
-#
+# Copyright (c) 2024 https://www.cdac.in All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
+
 
 # Disable 4G Control Plane
 omec-control-plane:
@@ -16,9 +15,18 @@ omec-control-plane:
 5g-control-plane:
   enable5G: true
   images:
-    repository: "registry.aetherproject.org/proxy/"
-    #tags:
-    #  amf: <amf image tag>
+    repository: "docker.io/"    # defaults to Docker Hub
+    tags:
+      amf: cdac5gc/5gc-amf:master-560dc70
+      smf: cdac5gc/5gc-smf:master-d1b5bf1
+      pcf: cdac5gc/5gc-pcf:master-624b610
+      nrf: cdac5gc/5gc-nrf:master-0a866c8
+      ausf: cdac5gc/5gc-ausf:master-37e152e
+      nssf: cdac5gc/5gc-nssf:master-7029e42
+      udm: cdac5gc/5gc-udm:master-c271d3d
+      udr: cdac5gc/5gc-udr:master-fe8c472
+      webui: cdac5gc/5gc-webui:master-5776ea4
+      metricfunc: cdac5gc/metricfunc:master-ed7ae9d
     # refer to above Helm Chart to add other NF images
 
   kafka:
@@ -45,7 +53,7 @@ omec-control-plane:
     #     debugLevel: trace
 
     mongodb:
-      name: aether
+      name: free5gc
       url: mongodb://mongodb-arbiter-headless # Enable if cluster deployment required
       authKeysDbName: authentication
       authUrl: mongodb://mongodb-arbiter-headless
@@ -55,7 +63,7 @@ omec-control-plane:
       syncUrl: http://sdcore-adapter-v2-1.aether-roc.svc:8080/synchronize
 
     sctplb:
-      deploy: true # If enabled then deploy sctp pod
+      deploy: false # If enabled then deploy sctp pod
       ngapp:
         externalIp: {{ core.amf.ip }}
         port: 38412
@@ -127,9 +135,9 @@ omec-control-plane:
 omec-sub-provision:
   enable: true
   images:
-    repository: "registry.aetherproject.org/proxy/"
-    #tags:
-    #  simapp: #add simapp override image
+    repository: ""    # defaults to Docker Hub
+    tags:
+      simapp: cdac5gc/simapp:master-dfbb736
 
   config:
     simapp:
@@ -147,141 +155,46 @@ omec-sub-provision:
             # You can have any number of subscriber ranges
             # This block is always necessary to establish range(s) of valid IMSIs
             subscribers:
-            - ueId-start: "208930100007487"
-              ueId-end: "208930100007500"
-              plmnId: "20893"
-              opc: "981d464c7c52eb6e5036234984ad0bcf"
+            - ueId-start: "001010000000001"
+              ueId-end: "001010000000012"
+              plmnId: "00101"
+              opc: "C42449363BBAD02B66D16BC975D77CC1"
               op: ""
-              key: "5122250214c33e723a5dd523fc145fc0"
-              sequenceNumber: "16f3b3f70fc2"
-            - ueId-start: "208930100007501"
-              ueId-end: "208930100007586"
-              plmnId: "20893"
-              opc: "981d464c7c52eb6e5036234984ad0bcf"
-              op: ""
-              key: "5122250214c33e723a5dd523fc145fc0"
+              key: "fec86ba6eb707ed08905757b1bb44b8f"
               sequenceNumber: "16f3b3f70fc2"
 
             # Configure Device Groups (ignored if provision-network-slice is disabled)
             device-groups:
             - name:  "5g-gnbsim-user-group1"
               imsis:
-                - "208930100007487"
-                - "208930100007488"
-                - "208930100007489"
-                - "208930100007490"
-                - "208930100007491"
-                - "208930100007492"
-                - "208930100007493"
-                - "208930100007494"
-                - "208930100007495"
-                - "208930100007496"
-                - "208930100007497"
-                - "208930100007498"
-                - "208930100007499"
-                - "208930100007500"
-                - "208930100007501"
-                - "208930100007502"
-                - "208930100007503"
-                - "208930100007504"
-                - "208930100007505"
-                - "208930100007506"
-                - "208930100007507"
-                - "208930100007508"
-                - "208930100007509"
-                - "208930100007510"
-                - "208930100007511"
-                - "208930100007512"
-                - "208930100007513"
-                - "208930100007514"
-                - "208930100007515"
-                - "208930100007516"
-                - "208930100007517"
-                - "208930100007518"
-                - "208930100007519"
-                - "208930100007520"
-                - "208930100007521"
-                - "208930100007522"
-                - "208930100007523"
-                - "208930100007524"
-                - "208930100007525"
-                - "208930100007526"
-                - "208930100007527"
-                - "208930100007528"
-                - "208930100007529"
-                - "208930100007530"
-                - "208930100007531"
-                - "208930100007532"
-                - "208930100007533"
-                - "208930100007534"
-                - "208930100007535"
-                - "208930100007536"
-                - "208930100007537"
-                - "208930100007538"
-                - "208930100007539"
-                - "208930100007540"
-                - "208930100007541"
-                - "208930100007542"
-                - "208930100007543"
-                - "208930100007544"
-                - "208930100007545"
-                - "208930100007546"
-                - "208930100007547"
-                - "208930100007548"
-                - "208930100007549"
-                - "208930100007550"
-                - "208930100007551"
-                - "208930100007552"
-                - "208930100007553"
-                - "208930100007554"
-                - "208930100007555"
-                - "208930100007556"
-                - "208930100007557"
-                - "208930100007558"
-                - "208930100007559"
-                - "208930100007560"
-                - "208930100007561"
-                - "208930100007562"
-                - "208930100007563"
-                - "208930100007564"
-                - "208930100007565"
-                - "208930100007566"
-                - "208930100007567"
-                - "208930100007568"
-                - "208930100007569"
-                - "208930100007570"
-                - "208930100007571"
-                - "208930100007572"
-                - "208930100007573"
-                - "208930100007574"
-                - "208930100007575"
-                - "208930100007576"
-                - "208930100007577"
-                - "208930100007578"
-                - "208930100007579"
-                - "208930100007580"
-                - "208930100007581"
-                - "208930100007582"
-                - "208930100007583"
-                - "208930100007584"
-                - "208930100007585"
-                - "208930100007586"
-              ip-domain-name: "pool1"
-              ip-domain-expanded:
-                dnn: internet
-                dns-primary: "8.8.8.8"        # Value is sent to UE
-                mtu: 1460                     # Value is sent to UE when PDU Session Established
-                ue-ip-pool: "172.250.1.0/16"  # IP address pool for subscribers
-                ue-dnn-qos:
-                  dnn-mbr-downlink: 1000      # UE level downlink QoS (Maximum bit rate per UE)
-                  dnn-mbr-uplink:   1000      # UE level uplink QoS (Maximum bit rate per UE)
-                  bitrate-unit: Mbps          # Unit for above QoS rates
-                  traffic-class:              # Default bearer QCI/ARP (not used in 5G)
-                    name: "platinum"
-                    qci: 9
-                    arp: 6
-                    pdb: 300
-                    pelr: 6
+                - "001010000000001"
+                - "001010000000002" 
+                - "001010000000003"
+                - "001010000000004"
+                - "001010000000005"
+                - "001010000000006"
+                - "001010000000007"
+                - "001010000000008"
+                - "001010000000009"
+                - "001010000000010"
+                - "001010000000011"
+                - "001010000000012"
+              ip-domain-name: "IP-Domains"
+              ip-domains:
+                - dnn: internet
+                  dns-primary: "10.176.0.11"
+                  mtu: 1456
+                  ue-ip-pool: "172.250.0.0/16"
+                  ue-dnn-qos:
+                    dnn-mbr-downlink: 1000
+                    dnn-mbr-uplink: 1000
+                    bitrate-unit: Mbps
+                    traffic-class:
+                      name: "platinum"
+                      qci: 9
+                      arp: 6
+                      pdb: 300
+                      pelr: 6
               site-info: "enterprise"
             # UPF allocates IP address if there is only 1 device-group
             # SMF allocates IP address if there is >1 device-group
@@ -290,7 +203,7 @@ omec-sub-provision:
             network-slices:
             - name: "default"      # can be any unique slice name
               slice-id:            # must match with slice configured in gNB, UE
-                sd: "010203"
+                sd: "000000"
                 sst: 1
               site-device-group:
               - "5g-gnbsim-user-group1"   # All UEs in this device-group are assigned to this slice
@@ -309,8 +222,8 @@ omec-sub-provision:
                 - name: "gnb2"
                   tac: 2
                 plmn:
-                  mcc: "208"
-                  mnc: "93"
+                  mcc: "001"
+                  mnc: "01"
                 site-name: "enterprise"
                 upf:
                   upf-name: "upf"  # associated UPF for this slice. One UPF per Slice.
@@ -323,24 +236,23 @@ omec-user-plane:
   nodeSelectors:
     enabled: true
   resources:
-    enabled: true
+    enabled: false
   images:
-    repository: "registry.aetherproject.org/proxy/"
+    repository: ""    # defaults to Docker Hub
     # following two lines pull busybox from Docker Hub instead of Aether Registry
     tags:
       tools: omecproject/busybox:stable
     # uncomment following section to add update bess image tag
-    #tags:
-    #  bess: <bess image tag>
-    #  pfcpiface: <pfcp image tag>
+    tags:
+      bess: cdac5gc/upf-epc-bess:master-ivybridge-89089b9
+      pfcpiface: cdac5gc/upf-epc-pfcpiface:master-ivybridge-89089b9
   config:
     upf:
       name: "oaisim"
-      privileged: true
       sriov:
-        enabled: true    # SRIOV is enabled
+        enabled: false    # SRIOV is disabled by default
       hugepage:
-        enabled: true    # Should be enabled if DPDK is enabled
+        enabled: false    # Should be enabled if DPDK is enabled
       routes:
         - to: {{ ansible_default_ipv4.address }}
           via: 169.254.1.1
@@ -348,35 +260,28 @@ omec-user-plane:
         subnet: {{ ran_subnet }} # Subnet for the gNB network
       access:
         ipam: static
-        cniPlugin: vfioveth    # Can be any other plugin. Dictates how IP address are assigned
+        cniPlugin: macvlan  # Can be any other plugin. Dictates how IP address are assigned
         iface: {{ core.data_iface }}
-        resourceName: "intel.com/intel_sriov_vfio_access"
         gateway: {{ access_gw }}
         ip: {{ access_ip }}
       core:
         ipam: static
-        cniPlugin: vfioveth    # Can be any other plugin. Dictates how IP address are assigned
+        cniPlugin: macvlan  # Can be any other plugin. Dictates how IP address are assigned
         iface: {{ core.data_iface }}
-        resourceName: "intel.com/intel_sriov_vfio_core"
         gateway: {{ core_gw }}
         ip: {{ core_ip }}
       cfgFiles:
         upf.jsonc:
-          mode: {{ core.upf.mode }}
+          mode: af_packet                # This mode implies no DPDK
           hwcksum: true
           log_level: "info"
           measure_upf: true
           measure_flow: true
           gtppsc: true                   # Extension header enabled in 5G.
-          # DDP is INTEL NIC's specific feature (supported in E810 series)
-          # which helps to improve UPF packet processing performance.
-          # For more details on DDP feature and its usage please refer
-          # "https://www.intel.com/content/www/us/en/download/19660/intel-ethernet-800-series-dynamic-device-personalization-ddp-for-telecommunication-comms-package.html"
-          ddp: false                     # this parameter is only used/relevant when deploying the UPF in 'dpdk' mode
           cpiface:
-            dnn: "internet"              # Must match Slice dnn
-            hostname: "upf"
-            #http_port: "8080"
+            dnn_list:
+              - dnn: "internet"
+                ue_ip_pool: "172.250.0.0/16" 
             enable_ue_ip_alloc: false    # If true, UPF allocates address from following pool
             ue_ip_pool: {{ core.upf.default_upf.ue_ip_pool }} # IP pool used UEs if enable_ue_ip_alloc=true
           slice_rate_limit_config:       # Slice-level rate limiting (also controlled by ROC)

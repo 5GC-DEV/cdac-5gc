@@ -1,13 +1,16 @@
 core:
   standalone: true
-  data_iface: ens18
+  data_iface: enp0s3
   values_file: "roles/core/templates/sdcore-5g-values.yaml"
-  ran_subnet: "172.20.0.0/16"		 # set it to empty to get subnet from 'data_iface'
+  ran_subnet: "" # set it to empty to get subnet from 'data_iface'
 
   helm:
     local_charts: false
     chart_ref: aether/sd-core
-    chart_version: 2.0.0
+    chart_version: 1.0.4
+
+  amf:
+    ip: "10.176.27.204"
 
   upf:
     access_subnet: "192.168.252.1/24"	# access subnet & gateway

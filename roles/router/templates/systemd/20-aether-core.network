@@ -11,3 +11,7 @@ Address={{ core.upf.core_subnet }}
 [Route]
 Gateway={{ core.upf.default_upf.ip.core }}
 Destination={{ core.upf.default_upf.ue_ip_pool }}
+
+[Route]
+Gateway={{ core.upf.IMS_upf.ip.core }}
+Destination={{ core.upf.IMS_upf.ue_ip_pool }}

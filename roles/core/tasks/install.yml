@@ -1,9 +1,10 @@
 ---
 
-- name: add aether chart repo
+- name: add 5gc chart repo
   kubernetes.core.helm_repository:
     name: aether
     repo_url: "https://charts.aetherproject.org"
+  when: inventory_hostname in groups['master_nodes'] and not core.helm.local_charts
   when: inventory_hostname in groups['master_nodes'] and not core.helm.local_charts
 
 - name: find {{ core.data_iface }}'s subnet for RAN
@@ -62,24 +63,24 @@
     var: "chart_ref_sd_core"
   when: inventory_hostname in groups['master_nodes'] and core.helm.local_charts
 
-- name: update aether 5gc-cp helm dependencies
+- name: update iosmcn core-cp helm dependencies
   shell: |
     helm dep up /tmp/sdcore-helm-charts/5g-control-plane
   when: inventory_hostname in groups['master_nodes'] and core.helm.local_charts
 
-- name: update aether 5gc helm dependencies
+- name: update iosmcn core helm dependencies
   shell: |
     helm dep up {{chart_ref_sd_core}}
   when: inventory_hostname in groups['master_nodes'] and core.helm.local_charts
 
 # TODO: add systems check to avoid issues (e.g., mongodb needing avx support)
-- name: deploy aether 5gc
+- name: deploy iosmcn core
   block:
-    - name: deploy aether 5gc
+    - name: deploy iosmcn core
       kubernetes.core.helm:
         update_repo_cache: true
         name: sd-core
-        release_namespace: aether-5gc
+        release_namespace: iosmcn
         create_namespace: true
         chart_ref: "{{ core.helm.chart_ref if core.helm.local_charts == false else chart_ref_sd_core }}"
         chart_version: "{{ core.helm.chart_version }}"
@@ -92,7 +93,7 @@
 
   rescue:
     - name: Get Pods Status
-      shell: kubectl get po -n aether-5gc
+      shell: kubectl get po -n iosmcn
       register: pod_status
       changed_when: false
       when: inventory_hostname in groups['master_nodes']
@@ -104,7 +105,7 @@
           status=$(echo "$line" | awk '{print $3}')
 
           if [[ "$status" != "Running" ]]; then
-            kubectl delete pod "$name" -n aether-5gc
+            kubectl delete pod "$name" -n iosmcn
           fi
         done <<< "{{ pod_status.stdout }}"
       args:
