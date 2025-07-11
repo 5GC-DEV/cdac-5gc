@@ -35,14 +35,13 @@ omec-control-plane:
     enabled: false
 
   config:
-    logger:
-      Util:
-        debugLevel: warn
-    #   # network function
+    # logger:
+    #   Util:
+    #     debugLevel: warn
     #   AMF:
-    #     debugLevel: trace
+    #     debugLevel: debug
     #   SMF:
-    #     debugLevel: trace
+    #     debugLevel: debug
 
     mongodb:
       name: aether
@@ -52,7 +51,6 @@ omec-control-plane:
 
     managedByConfigPod:
       enabled: true
-      syncUrl: http://sdcore-adapter-v2-1.aether-roc.svc:8080/synchronize
 
     sctplb:
       deploy: true # If enabled then deploy sctp pod
@@ -66,6 +64,12 @@ omec-control-plane:
 
     metricfunc:
       deploy: true
+      cfgFiles:
+        metricscfg.yaml:
+          configuration:
+            controllerFlag: {{ core.closed_loop | default('false') }}
+            userAppApiServer:
+              addr: "upf"
 
     # Change AMF config here if rquired
     # Most of the AMF config comes from Slice APIs but some of the config is
@@ -118,6 +122,7 @@ omec-control-plane:
           configuration:
             managedByConfigPod:
               enabled: {{ not core.standalone }}
+              syncUrl: http://roc-sdcore-adapter-v2-1.aether-roc.svc:8080/synchronize
 
 # Override values for omec-sub-provision (subscriber) Helm Chart
 # https://github.com/omec-project/sdcore-helm-charts/blob/main/omec-sub-provision/values.yaml
@@ -155,7 +160,7 @@ omec-sub-provision:
 
             # Configure Device Groups (ignored if provision-network-slice is disabled)
             device-groups:
-            - name:  "5g-user-group1"
+            - name:  "user-group1"
               imsis:
                 - "001010123456864"
                 - "001010123456865"
@@ -164,7 +169,7 @@ omec-sub-provision:
                 dnn: internet
                 dns-primary: "8.8.8.8"        # Value is sent to UE
                 mtu: 1460                     # Value is sent to UE when PDU Session Established
-                ue-ip-pool: "172.250.1.0/16"  # IP address pool for subscribers
+                ue-ip-pool: {{ core.upf.default_upf.ue_ip_pool }}  # IP address pool for subscribers
                 ue-dnn-qos:
                   dnn-mbr-downlink: 1000      # UE level downlink QoS (Maximum bit rate per UE)
                   dnn-mbr-uplink:   1000      # UE level uplink QoS (Maximum bit rate per UE)
@@ -188,7 +193,7 @@ omec-sub-provision:
                 sd: "010203"
                 sst: 1
               site-device-group:
-              - "5g-user-group1"   # All UEs in this device-group are assigned to this slice
+              - "user-group1"   # All UEs in this device-group are assigned to this slice
               # Applicaiton filters control what each user can access.
               # Default, allow access to all applications
               application-filtering-rules:
@@ -221,13 +226,10 @@ omec-user-plane:
     enabled: false
   images:
     repository: "registry.aetherproject.org/proxy/"
-    # following two lines pull busybox from Docker Hub instead of Aether Registry
-    tags:
-      tools: omecproject/busybox:stable
-    # uncomment following section to add update bess image tag
-    #tags:
-    #  bess: <bess image tag>
-    #  pfcpiface: <pfcp image tag>
+    # tags:
+      # bess: <bess image tag>
+      # pfcpiface: <pfcp image tag>
+      # tools: omecproject/busybox:stable
   config:
     upf:
       name: "oaisim"
@@ -254,6 +256,7 @@ omec-user-plane:
         iface: {{ core.data_iface }}
         gateway: {{ core_gw }}
         ip: {{ core_ip }}
+      closedLoop: {{ core.closed_loop | default('false') }}
       cfgFiles:
         upf.jsonc:
           mode: {{ core.upf.mode }}
