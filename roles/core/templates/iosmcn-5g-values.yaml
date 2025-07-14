@@ -18,16 +18,16 @@ omec-control-plane:
   images:
     repository: ""    # defaults to Docker Hub
     tags:
-      amf: ghcr.io/ios-mcn-core/5gc-amf:release-0.1.5
-      smf: ghcr.io/ios-mcn-core/5gc-smf:release-0.1.5
-      pcf: ghcr.io/ios-mcn-core/5gc-pcf:release-0.1.2
-      nrf: ghcr.io/ios-mcn-core/5gc-nrf:release-0.1.1
-      ausf: ghcr.io/ios-mcn-core/5gc-ausf:release-0.1.2
-      nssf: ghcr.io/ios-mcn-core/5gc-nssf:release-0.1.1
-      udm: ghcr.io/ios-mcn-core/5gc-udm:release-0.1.2
-      udr: ghcr.io/ios-mcn-core/5gc-udr:release-0.1.2
-      webui: ghcr.io/ios-mcn-core/5gc-webui:release-0.1.2
-      metricfunc: ghcr.io/ios-mcn-core/metricfunc:release-0.1.1
+      amf: ghcr.io/ios-mcn-core/5gc-amf:release-0.2.1
+      smf: ghcr.io/ios-mcn-core/5gc-smf:release-0.2.1
+      pcf: ghcr.io/ios-mcn-core/5gc-pcf:release-0.2.1
+      nrf: ghcr.io/ios-mcn-core/5gc-nrf:release-0.2.1
+      ausf: ghcr.io/ios-mcn-core/5gc-ausf:release-0.2.1
+      nssf: ghcr.io/ios-mcn-core/5gc-nssf:release-0.2.1
+      udm: ghcr.io/ios-mcn-core/5gc-udm:release-0.2.1
+      udr: ghcr.io/ios-mcn-core/5gc-udr:release-0.2.1
+      webui: ghcr.io/ios-mcn-core/5gc-webui:release-0.2.1
+      metricfunc: ghcr.io/ios-mcn-core/metricfunc:release-0.2.1
     # refer to above Helm Chart to add other NF images
 
   kafka:
@@ -44,9 +44,9 @@ omec-control-plane:
     enabled: false
 
   config:
-    logger:
-      Util:
-        debugLevel: warn
+   # logger:
+    #  Util:
+     #   debugLevel: warn
     #   # network function
     #   AMF:
     #     debugLevel: trace
@@ -54,14 +54,13 @@ omec-control-plane:
     #     debugLevel: trace
 
     mongodb:
-      name: free5gc
+      name: iosmcn
       url: mongodb://mongodb-arbiter-headless # Enable if cluster deployment required
       authKeysDbName: authentication
       authUrl: mongodb://mongodb-arbiter-headless
 
     managedByConfigPod:
       enabled: true
-      syncUrl: http://sdcore-adapter-v2-1.aether-roc.svc:8080/synchronize
 
     sctplb:
       deploy: false # If enabled then deploy sctp pod
@@ -74,7 +73,12 @@ omec-control-plane:
 
     metricfunc:
       deploy: true
-
+      cfgFiles:
+        metricscfg.yaml:
+          configuration:
+            controllerFlag: {{ core.closed_loop | default('false') }}
+            userAppApiServer:
+              addr: "upf"
     # Change AMF config here if rquired
     # Most of the AMF config comes from Slice APIs but some of the config is
     # directly provided through Helm Charts
@@ -129,6 +133,7 @@ omec-control-plane:
           configuration:
             managedByConfigPod:
               enabled: {{ not core.standalone }}
+              syncUrl: http://roc-sdcore-adapter-v2-1.aether-roc.svc:8080/synchronize
 
 # Override values for omec-sub-provision (subscriber) Helm Chart
 # https://github.com/omec-project/sdcore-helm-charts/blob/main/omec-sub-provision/values.yaml
@@ -138,8 +143,7 @@ omec-sub-provision:
   images:
     repository: ""    # defaults to Docker Hub
     tags:
-      simapp: ghcr.io/ios-mcn-core/simapp:release-0.1.2
-
+      simapp: ghcr.io/ios-mcn-core/simapp:release-0.2.1
   config:
     simapp:
       cfgFiles:
@@ -187,7 +191,7 @@ omec-sub-provision:
 
             # Configure Device Groups (ignored if provision-network-slice is disabled)
             device-groups:
-            - name:  "5g-gnbsim-user-group1"
+            - name:  "gnbsim-user-group1"
               imsis:
                 - "001010000000001"
                 - "001010000000002"
@@ -222,7 +226,7 @@ omec-sub-provision:
                 sd: "000000"
                 sst: 1
               site-device-group:
-              - "5g-gnbsim-user-group1"   # All UEs in this device-group are assigned to this slice
+              - "gnbsim-user-group1"   # All UEs in this device-group are assigned to this slice
               # Applicaiton filters control what each user can access.
               # Default, allow access to all applications
               application-filtering-rules:
@@ -260,8 +264,8 @@ omec-user-plane:
       tools: omecproject/busybox:stable
     # uncomment following section to add update bess image tag
     tags:
-      bess: ghcr.io/ios-mcn-core/upf-epc-bess:release-ivybridge-0.1.4
-      pfcpiface: ghcr.io/ios-mcn-core/upf-epc-pfcpiface:release-ivybridge-0.1.4
+      bess: ghcr.io/ios-mcn-core/upf-epc-bess:release-ivybridge-0.2.1
+      pfcpiface: ghcr.io/ios-mcn-core/upf-epc-pfcpiface:release-ivybridge-0.2.1
   config:
     upf:
       name: "oaisim"
