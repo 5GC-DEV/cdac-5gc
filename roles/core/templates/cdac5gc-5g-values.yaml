@@ -17,7 +17,7 @@ omec-control-plane:
   images:
     repository: "docker.io/"    # defaults to Docker Hub
     tags:
-      amf: cdac5gc/5gc-amf:master-560dc70
+      aamf: cdac5gc/5gc-amf:master-5dcbbc0
       smf: cdac5gc/5gc-smf:master-d1b5bf1
       pcf: cdac5gc/5gc-pcf:master-624b610
       nrf: cdac5gc/5gc-nrf:master-0a866c8
@@ -43,9 +43,9 @@ omec-control-plane:
     enabled: false
 
   config:
-    logger:
-      Util:
-        debugLevel: warn
+    #logger:
+     # Util:
+      #  debugLevel: warn
     #   # network function
     #   AMF:
     #     debugLevel: trace
@@ -53,14 +53,14 @@ omec-control-plane:
     #     debugLevel: trace
 
     mongodb:
-      name: free5gc
+      name: iosmcn
       url: mongodb://mongodb-arbiter-headless # Enable if cluster deployment required
       authKeysDbName: authentication
       authUrl: mongodb://mongodb-arbiter-headless
 
     managedByConfigPod:
       enabled: true
-      syncUrl: http://sdcore-adapter-v2-1.aether-roc.svc:8080/synchronize
+      #syncUrl: http://sdcore-adapter-v2-1.aether-roc.svc:8080/synchronize
 
     sctplb:
       deploy: false # If enabled then deploy sctp pod
@@ -73,6 +73,12 @@ omec-control-plane:
 
     metricfunc:
       deploy: true
+      cfgFiles:
+        metricscfg.yaml:
+          configuration:
+            controllerFlag: {{ core.closed_loop | default('false') }}
+            userAppApiServer:
+              addr: "upf"
 
     # Change AMF config here if rquired
     # Most of the AMF config comes from Slice APIs but some of the config is
@@ -128,6 +134,7 @@ omec-control-plane:
           configuration:
             managedByConfigPod:
               enabled: {{ not core.standalone }}
+              syncUrl: http://roc-sdcore-adapter-v2-1.aether-roc.svc:8080/synchronize
 
 # Override values for omec-sub-provision (subscriber) Helm Chart
 # https://github.com/omec-project/sdcore-helm-charts/blob/main/omec-sub-provision/values.yaml
@@ -137,7 +144,7 @@ omec-sub-provision:
   images:
     repository: ""    # defaults to Docker Hub
     tags:
-      simapp: cdac5gc/simapp:master-dfbb736
+      simapp: cdac5gc/simapp:master-fbc9382
 
   config:
     simapp:
@@ -165,7 +172,7 @@ omec-sub-provision:
 
             # Configure Device Groups (ignored if provision-network-slice is disabled)
             device-groups:
-            - name:  "5g-gnbsim-user-group1"
+            - name:  "gnbsim-user-group1"
               imsis:
                 - "001010000000001"
                 - "001010000000002" 
@@ -206,7 +213,7 @@ omec-sub-provision:
                 sd: "000000"
                 sst: 1
               site-device-group:
-              - "5g-gnbsim-user-group1"   # All UEs in this device-group are assigned to this slice
+              - "gnbsim-user-group1"   # All UEs in this device-group are assigned to this slice
               # Applicaiton filters control what each user can access.
               # Default, allow access to all applications
               application-filtering-rules:
@@ -244,8 +251,8 @@ omec-user-plane:
       tools: omecproject/busybox:stable
     # uncomment following section to add update bess image tag
     tags:
-      bess: cdac5gc/upf-epc-bess:master-ivybridge-89089b9
-      pfcpiface: cdac5gc/upf-epc-pfcpiface:master-ivybridge-89089b9
+      bess: docker.io/cdac5gc/upf-epc-bess:master-ivybridge-05814e9
+      pfcpiface: docker.io/cdac5gc/upf-epc-pfcpiface:master-ivybridge-05814e9
   config:
     upf:
       name: "oaisim"
