@@ -17,7 +17,7 @@ omec-control-plane:
   images:
     repository: "docker.io/"    # defaults to Docker Hub
     tags:
-      aamf: cdac5gc/5gc-amf:master-5dcbbc0
+      amf: cdac5gc/5gc-amf:master-5dcbbc0
       smf: cdac5gc/5gc-smf:master-d1b5bf1
       pcf: cdac5gc/5gc-pcf:master-624b610
       nrf: cdac5gc/5gc-nrf:master-0a866c8
