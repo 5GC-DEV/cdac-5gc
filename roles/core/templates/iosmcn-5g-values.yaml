@@ -18,15 +18,15 @@ omec-control-plane:
   images:
     repository: ""    # defaults to Docker Hub
     tags:
-      amf: ghcr.io/ios-mcn-core/5gc-amf:release-0.2.1
-      smf: ghcr.io/ios-mcn-core/5gc-smf:release-0.2.1
-      pcf: ghcr.io/ios-mcn-core/5gc-pcf:release-0.2.1
+      amf: ghcr.io/ios-mcn-core/5gc-amf:release-0.2.2.rc1
+      smf: ghcr.io/ios-mcn-core/5gc-smf:release-0.2.2.rc1
+      pcf: ghcr.io/ios-mcn-core/5gc-pcf:release-0.2.2.rc1
       nrf: ghcr.io/ios-mcn-core/5gc-nrf:release-0.2.1
       ausf: ghcr.io/ios-mcn-core/5gc-ausf:release-0.2.1
       nssf: ghcr.io/ios-mcn-core/5gc-nssf:release-0.2.1
       udm: ghcr.io/ios-mcn-core/5gc-udm:release-0.2.1
-      udr: ghcr.io/ios-mcn-core/5gc-udr:release-0.2.1
-      webui: ghcr.io/ios-mcn-core/5gc-webui:release-0.2.1
+      udr: ghcr.io/ios-mcn-core/5gc-udr:release-0.2.2.rc1
+      webui: ghcr.io/ios-mcn-core/5gc-webui:release-0.2.2.rc1
       metricfunc: ghcr.io/ios-mcn-core/metricfunc:release-0.2.1
     # refer to above Helm Chart to add other NF images
 
@@ -143,7 +143,7 @@ omec-sub-provision:
   images:
     repository: ""    # defaults to Docker Hub
     tags:
-      simapp: ghcr.io/ios-mcn-core/simapp:release-0.2.1
+      simapp: ghcr.io/ios-mcn-core/simapp:release-0.2.2.rc1
   config:
     simapp:
       cfgFiles:
@@ -161,32 +161,11 @@ omec-sub-provision:
             # This block is always necessary to establish range(s) of valid IMSIs
             subscribers:
             - ueId-start: "001010000000001"
-              ueId-end: "001010000000003"
+              ueId-end: "001010000000012"
               plmnId: "00101"
               opc: "C42449363BBAD02B66D16BC975D77CC1"
               op: ""
               key: "fec86ba6eb707ed08905757b1bb44b8f"
-              sequenceNumber: "16f3b3f70fc2"
-            - ueId-start: "001010000000005"
-              ueId-end: "001010000000005"
-              plmnId: "00101"
-              opc: "63bfa50ee6523365ff14c1f45f88737d"
-              op: ""
-              key: "050A34601D4F07677303652C0462535B"
-              sequenceNumber: "16f3b3f70fc2"
-            - ueId-start: "001010000000008"
-              ueId-end: "001010000000008"
-              plmnId: "00101"
-              opc: "E8ED289DEBA952E4283B54E88E6183CA"
-              op: ""
-              key: "865B5CE8B199B49FAA5F0A2EE238A6B8"
-              sequenceNumber: "16f3b3f70fc2"
-            - ueId-start: "001010000000009"
-              ueId-end: "001010000000009"
-              plmnId: "00101"
-              opc: "63bfa50ee6523365ff14c1f45f88737d"
-              op: ""
-              key: "090A34601D4F07677303652C0462535B"
               sequenceNumber: "16f3b3f70fc2"
 
             # Configure Device Groups (ignored if provision-network-slice is disabled)
@@ -194,11 +173,30 @@ omec-sub-provision:
             - name:  "gnbsim-user-group1"
               imsis:
                 - "001010000000001"
-                - "001010000000002"
+                - "001010000000002" 
                 - "001010000000003"
+                - "001010000000004"
                 - "001010000000005"
+                - "001010000000006"
+                - "001010000000007"
                 - "001010000000008"
                 - "001010000000009"
+                - "001010000000010"
+                - "001010000000011"
+                - "001010000000012"
+              msisdns:
+                - "msisdn-9000000001"
+                - "msisdn-9000000002"
+                - "msisdn-9000000003"
+                - "msisdn-9000000004"
+                - "msisdn-9000000005"
+                - "msisdn-9000000006"
+                - "msisdn-9000000007"
+                - "msisdn-9000000008"
+                - "msisdn-9000000009"
+                - "msisdn-9000000010"
+                - "msisdn-9000000011"
+                - "msisdn-9000000012"
               ip-domain-name: "IP-Domains"
               ip-domains:
                 - dnn: internet
@@ -264,8 +262,8 @@ omec-user-plane:
       tools: omecproject/busybox:stable
     # uncomment following section to add update bess image tag
     tags:
-      bess: ghcr.io/ios-mcn-core/upf-epc-bess:release-ivybridge-0.2.1
-      pfcpiface: ghcr.io/ios-mcn-core/upf-epc-pfcpiface:release-ivybridge-0.2.1
+      bess: ghcr.io/ios-mcn-core/upf-epc-bess:release-ivybridge-0.2.2.rc1
+      pfcpiface: ghcr.io/ios-mcn-core/upf-epc-pfcpiface:release-ivybridge-0.2.2.rc1
   config:
     upf:
       name: "oaisim"

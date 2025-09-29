@@ -18,15 +18,15 @@ omec-control-plane:
   images:
     repository: ""    # defaults to Docker Hub
     tags:
-      amf: ghcr.io/ios-mcn-core/5gc-amf:release-0.2.1
-      smf: ghcr.io/ios-mcn-core/5gc-smf:release-0.2.1
-      pcf: ghcr.io/ios-mcn-core/5gc-pcf:release-0.2.1
+      amf: ghcr.io/ios-mcn-core/5gc-amf:release-0.2.2.rc1
+      smf: ghcr.io/ios-mcn-core/5gc-smf:release-0.2.2.rc1
+      pcf: ghcr.io/ios-mcn-core/5gc-pcf:release-0.2.2.rc1
       nrf: ghcr.io/ios-mcn-core/5gc-nrf:release-0.2.1
       ausf: ghcr.io/ios-mcn-core/5gc-ausf:release-0.2.1
       nssf: ghcr.io/ios-mcn-core/5gc-nssf:release-0.2.1
       udm: ghcr.io/ios-mcn-core/5gc-udm:release-0.2.1
-      udr: ghcr.io/ios-mcn-core/5gc-udr:release-0.2.1
-      webui: ghcr.io/ios-mcn-core/5gc-webui:release-0.2.1
+      udr: ghcr.io/ios-mcn-core/5gc-udr:release-0.2.2.rc1
+      webui: ghcr.io/ios-mcn-core/5gc-webui:release-0.2.2.rc1
       metricfunc: ghcr.io/ios-mcn-core/metricfunc:release-0.2.1
     #tags:
     #  amf: <amf image tag>
@@ -146,7 +146,7 @@ omec-sub-provision:
   images:
     repository: ""
     tags:
-      simapp: ghcr.io/ios-mcn-core/simapp:release-0.2.1
+      simapp: ghcr.io/ios-mcn-core/simapp:release-0.2.2.rc1
   config:
     simapp:
       cfgFiles:
@@ -187,6 +187,19 @@ omec-sub-provision:
                 - "001010000000010"
                 - "001010000000011"
                 - "001010000000012"
+              msisdns:
+                - "msisdn-9000000001"
+                - "msisdn-9000000002"
+                - "msisdn-9000000003"
+                - "msisdn-9000000004"
+                - "msisdn-9000000005"
+                - "msisdn-9000000006"
+                - "msisdn-9000000007"
+                - "msisdn-9000000008"
+                - "msisdn-9000000009"
+                - "msisdn-9000000010"
+                - "msisdn-9000000011"
+                - "msisdn-9000000012"
               ip-domain-name: "IP-Domains"
               ip-domains:
                 - dnn: ims
@@ -266,8 +279,8 @@ omec-user-plane:
       tools: omecproject/busybox:stable
     # uncomment following section to add update bess image tag
     tags:
-      bess: ghcr.io/ios-mcn-core/upf-epc-bess:release-ivybridge-0.2.1
-      pfcpiface: ghcr.io/ios-mcn-core/upf-epc-pfcpiface:release-ivybridge-0.2.1
+      bess: ghcr.io/ios-mcn-core/upf-epc-bess:release-ivybridge-0.2.2.rc1
+      pfcpiface: ghcr.io/ios-mcn-core/upf-epc-pfcpiface:release-ivybridge-0.2.2.rc1
     upf:
       name: "oaisim"
       privileged: true
@@ -302,7 +315,7 @@ omec-user-plane:
           log_level: "info"
           log_level: "info"
           measure_upf: true
-          measure_flow: true
+          measure_flow: false
           gtppsc: true                   # Extension header enabled in 5G.
           # DDP is INTEL NIC's specific feature (supported in E810 series)
           # which helps to improve UPF packet processing performance.

@@ -186,6 +186,19 @@ omec-sub-provision:
                 - "001010000000010"
                 - "001010000000011"
                 - "001010000000012"
+              msisdns:
+                - "msisdn-9000000001"
+                - "msisdn-9000000002"
+                - "msisdn-9000000003"
+                - "msisdn-9000000004"
+                - "msisdn-9000000005"
+                - "msisdn-9000000006"
+                - "msisdn-9000000007"
+                - "msisdn-9000000008"
+                - "msisdn-9000000009"
+                - "msisdn-9000000010"
+                - "msisdn-9000000011"
+                - "msisdn-9000000012"
               ip-domain-name: "IP-Domains"
               ip-domains:
                 - dnn: internet
