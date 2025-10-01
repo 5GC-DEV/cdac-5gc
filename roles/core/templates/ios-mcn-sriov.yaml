@@ -34,6 +34,8 @@ omec-control-plane:
 
   kafka:
     deploy: true
+    image:
+      repository: bitnamilegacy/kafka
 
   mongodb:
     usePassword: false
@@ -41,6 +43,8 @@ omec-control-plane:
       enabled: false
     architecture: replicaset
     replicaCount: 2
+    image:
+      repository: bitnamilegacy/mongodb
 
   resources:
     enabled: false
